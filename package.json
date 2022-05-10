@@ -1,6 +1,6 @@
 {
   "name": "peertube-plugin-oidc-cnr",
-  "version": "0.0.5",
+  "version": "1.0.2",
   "description": "Add OpenID connect support to login form in PeerTube.",
   "licence": "AGPL-3.0-only",
   "engine": {

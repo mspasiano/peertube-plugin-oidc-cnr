@@ -119,6 +119,14 @@ async function register ({
   })
 
   registerSetting({
+    name: 'logout-redirect-uri',
+    label: 'Redirect URI on logout',
+    type: 'input',
+    private: true,
+    descriptionHTML: 'Redirect URI on logout'
+  })
+
+  registerSetting({
     name: 'signature-algorithm',
     label: 'Token signature algorithm',
     type: 'input',
@@ -148,6 +156,7 @@ async function register ({
   }
 
   store.authDisplayName = await settingsManager.getSetting('auth-display-name')
+  store.logoutRedirectUrl = await settingsManager.getSetting('logout-redirect-uri');
 }
 
 async function unregister () {
@@ -196,6 +205,7 @@ async function loadSettingsAndCreateClient (registerExternalAuth, unregisterExte
 
   const clientOptions = {
     client_id: settings['client-id'],
+    client_secret: settings['client-secret'],
     redirect_uris: [ store.redirectUrl ],
     response_types: [ 'code' ],
     id_token_signed_response_alg: settings['signature-algorithm'],
@@ -248,6 +258,12 @@ async function loadSettingsAndCreateClient (registerExternalAuth, unregisterExte
       } catch (err) {
         logger.error('Cannot handle auth request.', { err })
       }
+    },
+    onLogout: (user, req) => {
+      const logoutUrl = store.client.endSessionUrl({
+        redirect_uri: store.logoutRedirectUrl
+      });
+      return logoutUrl;
     }
   })
 
@@ -295,7 +311,8 @@ async function handleCb (peertubeHelpers, settingsManager, req, res) {
       'role-property',
       'group-property',
       'allowed-group',
-      'access-property'
+      'access-property',
+      'logout-redirect-uri'
     ])
 
     logger.debug('Got userinfo from openid auth.', { userInfo, settings })

@@ -12,5 +12,4 @@ If you use this attribute it should hold a paroperty that contains `tube.roles` 
 - `Moderator#tube` (Moderator)
 - `User#tube` (User)
 
-If you want to deny access use this attribute `access-property`
-With `group-property` and `allowed-group` you can allow only a subset of users to login.
+If you want to deny access use this boolean attribute `access-property` or you can use `group-property` and `allowed-group` you can allow only a subset of users to login.

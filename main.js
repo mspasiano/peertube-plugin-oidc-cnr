@@ -239,7 +239,7 @@ async function loadSettingsAndCreateClient (registerExternalAuth, unregisterExte
 
         const cookieOptions = {
           secure: true,
-          httpOnly: false,
+          httpOnly: true,
           sameSite: 'none',
           maxAge: 1000 * 60 * 10 // 10 minutes
         }
@@ -249,10 +249,6 @@ async function loadSettingsAndCreateClient (registerExternalAuth, unregisterExte
 
         const encryptedState = await encrypt(state)
         res.cookie(cookieNamePrefix + 'state', encryptedState, cookieOptions)
-
-        if (req.query.previousUrl) {
-          res.cookie(cookieNamePrefix + 'previousUrl', req.query.previousUrl, cookieOptions)          
-        }
 
         return res.redirect(redirectUrl)
       } catch (err) {
